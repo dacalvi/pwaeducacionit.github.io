@@ -1,3 +1,21 @@
 .colorbasico {
     background-color: #ec4b4b !important;
 }
+
+
+.loading {
+    text-align: center;
+    padding-top: 200px;
+    opacity: 0.9;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.loading.visible {
+    display: block;
+}
