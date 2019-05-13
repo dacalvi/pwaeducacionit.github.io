@@ -61,6 +61,14 @@ function getUbicacion(){
 }
 
 
+function llamadaafetch(){
+    let promesafetch = fetch('https://jsonplaceholder.typicode.com/posts/1');
+    promesafetch
+    .then((result)=> result.json())
+    .then(json => console.log(json));
+}
+
+
 
 
 

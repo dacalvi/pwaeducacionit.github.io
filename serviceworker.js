@@ -1,17 +1,6 @@
-// Chrome's currently missing some useful cache methods,
-// this polyfill adds them.
-//importScripts('serviceworker-cache-polyfill.js');
-
-// Here comes the install event!
-// This only happens once, when the browser sees this
-// version of the ServiceWorker for the first time.
 self.addEventListener('install', function(event) {
-  // We pass a promise to event.waitUntil to signal how 
-  // long install takes, and if it failed
   event.waitUntil(
-    // We open a cache…
-    caches.open('simple-sw-v1').then(function(cache) {
-      // And add resources to it
+    caches.open('simple-sw-v4').then(function(cache) {
       return cache.addAll([
         '/assets/img/logo.jpg',
         '/index.html'
@@ -20,13 +9,72 @@ self.addEventListener('install', function(event) {
   );
 });
 
+
+
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          // Return true if you want to remove this cache,
+          // but remember that caches are shared across
+          // the whole origin
+          if(cacheName !== 'simple-sw-v4'){return true}
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
+
+//Eventos posibles: install, activate, message, fetch, sync, push
+//install
+
+
+self.addEventListener('sync', function(event){
+  if(event.tag === 'sincronizar'){
+    event.waitUntil(
+      new Promise((resolve, reject)=>{
+        fetch('a nuestra api').then((result)=>{
+          
+          resolve();
+        })
+        .catch(()=>{
+          reject();
+        });
+      })
+      //promesa a repetirse hasta que de true
+      //una vez que da true, se vuelve a registrar un evento sync "sincronizar"
+    );  
+  }
+});
+
+
+
+
+
+self.addEventListener('push', function(event) {
+  //console.log('[Service Worker] Push Received.');
+  //console.log(event.data);
+
+  const title = 'Push Prueba';
+  const options = {
+    body: 'funciona!.',
+    icon: 'apple-icon-60x60.png',
+    badge: 'apple-icon-60x60.png'
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
 // The fetch event happens for the page request with the
 // ServiceWorker's scope, and any request made within that
 // page
+
 self.addEventListener('fetch', function(event) {
-  // Calling event.respondWith means we're in charge
-  // of providing the response. We pass in a promise
-  // that resolves with a response object
+  
   event.respondWith(
     // First we look for something in the caches that
     // matches the request

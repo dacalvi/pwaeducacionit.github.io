@@ -77,10 +77,14 @@
             if('serviceWorker' in navigator) {
                 navigator.serviceWorker
                     .register('/serviceworker.js')
-                    .then(function() { 
-                        console.log("Service Worker Registered"); 
-                    });
+                    .then(function(registration) { 
+                        //Evento sync 
+                        registration.sync.register('sincronizar');
+                        console.log("Service Worker Registrado, el scope es: " + registration.scope ); 
+                    }); 
             }
+
+            
         </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.js"></script>

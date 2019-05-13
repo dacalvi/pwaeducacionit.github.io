@@ -35,4 +35,7 @@
 
         <button type="button" class="btn btn-primary" id="btnGuardar" >Guardar</button>
     </fieldset>
+
+    <button type="button" onclick="llamadaafetch();" class="btn btn-secondary" id="btnFetch">Llamar a fetch</button>
+
 </form>
